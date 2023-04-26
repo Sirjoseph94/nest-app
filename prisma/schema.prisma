@@ -15,6 +15,17 @@ model Article {
   published   Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+author      User?    @relation(fields: [authorId], references: [id])
+  authorId    String?
 }
 
+model User {
+  id        String       @id @default(cuid())
+  name      String?
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  articles  Article[]
+}
  

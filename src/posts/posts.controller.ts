@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -24,17 +24,23 @@ export class PostsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postsService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const data = await this.postsService.findOne(id);
+    if(!data) throw new NotFoundException(`Can't find post with the ID ${id}`)
+    return data
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postsService.update(id, updatePostDto);
+ async update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+    const data = await this.postsService.update(id, updatePostDto);
+    if (!data) throw new NotFoundException(`Can't find post with the ID ${id}`);
+    return data
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postsService.remove(id);
+  async remove(@Param('id') id: string) {
+    const data = await this.postsService.remove(id);
+    if (!data) throw new NotFoundException(`Can't find post with the ID ${id}`);
+    return data
   }
 }

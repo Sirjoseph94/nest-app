@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -19,7 +19,6 @@ export class PostsService {
 
   async findOne(id: string) {
     const data = await this.prisma.article.findUnique({ where: { id } });
-    if (!data) throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
     return data;
   }
 
@@ -28,7 +27,6 @@ export class PostsService {
       where: { id },
       data: updatePostDto,
     });
-    if (!data) throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
     return data;
   }
 
